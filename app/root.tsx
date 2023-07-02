@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import tailwind from "~/tailwind.css";
 import type { Database } from "./utils/db_types";
 import { UserCircleIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import NavBarLink from "./components/NavLink";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -80,21 +81,26 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="bg-neutral-900 w-screen h-screen bg-cover bg-no-repeat text-slate-100">
-        <div className="flex justify-start items-center m-2">
-          <Link to="/?index" className="m-2 bg-teal-900">
-            Home Page
-          </Link>
+      <body className="bg-neutral-900 w-screen h-screen bg-cover bg-no-repeat text-slate-100 m-2">
+        <div className="flex justify-between items-center m-2">
+          <div className="flex justify-center">
+            <NavBarLink to="/">Home</NavBarLink>
+            <NavBarLink to="/about">About</NavBarLink>
+          </div>
+
           {serverAccessToken ? (
             <div>
               <Link to="/auth/profile">This won't work yet :(</Link>
               <UserCircleIcon className="w-6 h-6 m-2 p-2"></UserCircleIcon>
             </div>
           ) : (
-            <div className="flex flex-row items-center m-4">
-              <Link to="/auth/login">Login</Link>
-              <UserPlusIcon className="m-2 w-8"></UserPlusIcon>
-            </div>
+            <NavBarLink
+              to="/auth/login"
+              className="flex flex-row items-center m-2"
+            >
+              <p>Login</p>
+              <UserPlusIcon className="ml-2 w-4"></UserPlusIcon>
+            </NavBarLink>
           )}
         </div>
 
