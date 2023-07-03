@@ -19,8 +19,8 @@ import {
 import { useEffect, useState } from "react";
 import tailwind from "~/tailwind.css";
 import type { Database } from "./utils/db_types";
-import { UserCircleIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import NavBarLink from "./components/NavLink";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
   { rel: "stylesheet", href: "/theme.css" },
@@ -96,7 +96,7 @@ export default function App() {
           {serverAccessToken ? (
             <div>
               <Link to="/auth/profile">This won't work yet :(</Link>
-              <UserCircleIcon className="w-6 h-6 m-2 p-2"></UserCircleIcon>
+              <AccountCircleIcon></AccountCircleIcon>
             </div>
           ) : (
             <NavBarLink
@@ -104,7 +104,7 @@ export default function App() {
               className="flex flex-row items-center m-2"
             >
               <p>Login</p>
-              <UserPlusIcon className="ml-2 w-4"></UserPlusIcon>
+              <AccountCircleIcon className="ml-2 w-4"></AccountCircleIcon>
             </NavBarLink>
           )}
         </div>
