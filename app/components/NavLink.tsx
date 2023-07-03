@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { NavLink } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import type { ReactNode } from "react";
 
 export default function NavBarLink({
@@ -12,7 +12,10 @@ export default function NavBarLink({
   className?: string;
 }) {
   return (
-    <Button href={to} variant="contained" LinkComponent={NavLink}>
+    // @ts-expect-error The Link component in Remix uses to instead of href
+    // While there might be a way to get it to work using forwardRef trickery
+    // as shown on the Material UI website, I wasn't having any luck with that.
+    <Button to={to} variant="contained" LinkComponent={Link} classes={"m-2"}>
       {children}
     </Button>
   );

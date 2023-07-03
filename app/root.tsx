@@ -21,6 +21,10 @@ import tailwind from "~/tailwind.css";
 import type { Database } from "./utils/db_types";
 import NavBarLink from "./components/NavLink";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({});
+
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
   { rel: "stylesheet", href: "/theme.css" },
@@ -82,11 +86,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body
-        className={
-          "bg-cyan-50 dark:bg-cyan-950 primary-text w-screen h-screen bg-cover bg-no-repeat m-2"
-        }
-      >
+      <body>
         <div className="flex justify-between items-center m-2">
           <div className="flex justify-center">
             <NavBarLink to="/">Home</NavBarLink>
@@ -99,10 +99,7 @@ export default function App() {
               <AccountCircleIcon></AccountCircleIcon>
             </div>
           ) : (
-            <NavBarLink
-              to="/auth/login"
-              className="flex flex-row items-center m-2"
-            >
+            <NavBarLink to="/auth/login" className="flex flex-row items-center">
               <p>Login</p>
               <AccountCircleIcon className="ml-2 w-4"></AccountCircleIcon>
             </NavBarLink>
