@@ -1,41 +1,83 @@
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import type { ActionFunction } from "@remix-run/node";
-import { Form } from "@remix-run/react";
 import { useState } from "react";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import { useOutletContext } from "@remix-run/react";
+import type { AppContext } from "~/globals";
 export const action: ActionFunction = async ({ request }) => {};
 
 export default function Login() {
+  const { supabase } = useOutletContext<AppContext>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showErrors, setShowErrors] = useState(false);
+
+  const handleGithubLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) {
+      alert(`There was an error signing in with Github ${error}`);
+    }
+  };
+
+  const handleEmailLogin = async () => {
+    if (email === "" || password === "") {
+      setShowErrors(true);
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      alert(`There was an error signing in with password: ${error}`);
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center h-screen on-screen">
-      <button className="rounded-lg primary-container hover:drop-shadow-lg duration-200 flex flex-row justify-center items-center p-2">
-        <p className="">Login with Github</p>
-        <img
-          src="/github-mark-white.png"
-          alt="The Github Invertocat logo"
-          className="w-8 m-2"
-        ></img>
-      </button>
-      <Form className="flex-col flex justify-center items-center text-center">
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          name="email"
-          className="p-2 m-2 w-auto border-black dark:border-white border-solid border-1 rounded"
-          required
-        ></input>
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          className="p-2 m-2"
-          required
-        ></input>
-        <button>Login</button>
-      </Form>
-    </div>
+    <Box display="flex" justifyContent="center" alignContent="center">
+      <Stack spacing={2} justifyItems="center" alignItems="center">
+        <Button variant="contained" onClick={handleGithubLogin}>
+          Login with Github
+          <img
+            src="/github-mark.png"
+            alt="The Github Invertocat Logo"
+            className="ml-2 p-2 w-10"
+          ></img>
+        </Button>
+        <TextField
+          variant="outlined"
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.currentTarget.value)}
+          error={showErrors}
+          helperText={
+            email === "" && showErrors ? "Please provide an email" : undefined
+          }
+        />
+        <TextField
+          variant="outlined"
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.currentTarget.value)}
+          error={showErrors}
+          helperText={
+            password === "" && showErrors
+              ? "Please provide a password"
+              : undefined
+          }
+        />
+        <Button onClick={handleEmailLogin} variant="contained">
+          Login
+        </Button>
+      </Stack>
+    </Box>
   );
 }
