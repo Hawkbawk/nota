@@ -1,5 +1,6 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
 import { json } from "@remix-run/node";
+import CssBaseline from "@mui/material/CssBaseline";
 import type { LoaderArgs, LinksFunction } from "@remix-run/node";
 import {
   Link,
@@ -16,18 +17,18 @@ import {
   createBrowserClient,
   createServerClient,
 } from "@supabase/auth-helpers-remix";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import tailwind from "~/tailwind.css";
 import type { Database } from "./utils/db_types";
 import NavBarLink from "./components/NavLink";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-const theme = createTheme({});
+import Paper from "@mui/material/Paper";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Container from "@mui/material/Container";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
-  { rel: "stylesheet", href: "/theme.css" },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
@@ -54,6 +55,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function App() {
   const { env, session } = useLoaderData<typeof loader>();
   const { revalidate } = useRevalidator();
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   const [supabase] = useState(() =>
     createBrowserClient<Database>(env.SUPABASE_URL, env.SUPABASE_ANON_KEY)
@@ -78,38 +80,58 @@ export default function App() {
     };
   });
 
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? "dark" : "light",
+        },
+      }),
+    [prefersDarkMode]
+  );
+
   return (
-    <html lang="en">
+    <html lang="en" className="w-full h-full m-0 p-0">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
+        <CssBaseline />
       </head>
-      <body>
-        <div className="flex justify-between items-center m-2">
-          <div className="flex justify-center">
-            <NavBarLink to="/">Home</NavBarLink>
-            <NavBarLink to="/about">About</NavBarLink>
-          </div>
+      <body className="m-0 p-0 box-border h-screen w-screen overscroll-none">
+        <ThemeProvider theme={theme}>
+          <Container maxWidth={false} disableGutters className="w-full h-full">
+            <Paper square className="w-full h-full">
+              <div className="flex justify-between items-center p-2">
+                <div className="flex justify-center">
+                  <NavBarLink to="/">Home</NavBarLink>
+                  <NavBarLink to="/about">About</NavBarLink>
+                </div>
 
-          {serverAccessToken ? (
-            <div>
-              <Link to="/auth/profile">This won't work yet :(</Link>
-              <AccountCircleIcon></AccountCircleIcon>
-            </div>
-          ) : (
-            <NavBarLink to="/auth/login" className="flex flex-row items-center">
-              <p>Login</p>
-              <AccountCircleIcon className="ml-2 w-4"></AccountCircleIcon>
-            </NavBarLink>
-          )}
-        </div>
+                {serverAccessToken ? (
+                  <div>
+                    <Link to="/auth/profile">This won't work yet :(</Link>
+                    <AccountCircleIcon></AccountCircleIcon>
+                  </div>
+                ) : (
+                  <NavBarLink
+                    to="/auth/login"
+                    className="flex flex-row items-center"
+                  >
+                    <p>Login</p>
+                    <AccountCircleIcon className="ml-2 w-4"></AccountCircleIcon>
+                  </NavBarLink>
+                )}
+              </div>
 
-        <Outlet context={supabase} />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+              <Outlet context={{ supabase }} />
+              <ScrollRestoration />
+              <Scripts />
+              <LiveReload />
+            </Paper>
+          </Container>
+        </ThemeProvider>
       </body>
     </html>
   );
