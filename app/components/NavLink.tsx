@@ -15,11 +15,11 @@ export default function NavBarLink({
   return (
     <NavLink
       to={to}
-      className={({ isActive, isPending }) => {
+      className={({ isActive }) => {
         if (isActive) {
-          return `${defaultClasses} bg-secondary`;
+          return `${defaultClasses}`;
         } else {
-          return `${defaultClasses} bg-primary`;
+          return `${defaultClasses}`;
         }
       }}
       end

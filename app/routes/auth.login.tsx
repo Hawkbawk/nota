@@ -8,9 +8,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   return (
-    <div className="flex flex-col items-center">
-      <button className="rounded-lg bg-teal-700 hover:drop-shadow-lg duration-200 flex flex-row justify-center items-center p-2">
-        <p>Login with Github</p>
+    <div className="flex flex-col items-center h-screen on-screen">
+      <button className="rounded-lg primary-container hover:drop-shadow-lg duration-200 flex flex-row justify-center items-center p-2">
+        <p className="">Login with Github</p>
         <img
           src="/github-mark-white.png"
           alt="The Github Invertocat logo"

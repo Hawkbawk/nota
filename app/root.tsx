@@ -23,6 +23,7 @@ import { UserCircleIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import NavBarLink from "./components/NavLink";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
+  { rel: "stylesheet", href: "/theme.css" },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
@@ -81,7 +82,11 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="bg-neutral-900 w-screen h-screen bg-cover bg-no-repeat text-slate-100 m-2">
+      <body
+        className={
+          "bg-cyan-50 dark:bg-cyan-950 primary-text w-screen h-screen bg-cover bg-no-repeat m-2"
+        }
+      >
         <div className="flex justify-between items-center m-2">
           <div className="flex justify-center">
             <NavBarLink to="/">Home</NavBarLink>
