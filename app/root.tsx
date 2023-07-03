@@ -99,7 +99,12 @@ export default function App() {
         <Links />
         <CssBaseline />
       </head>
-      <body className="m-0 p-0 box-border h-screen w-screen overscroll-none">
+      <body
+        className="m-0 p-0 box-border h-screen w-screen"
+        style={{
+          backgroundColor: theme.palette.background.paper,
+        }}
+      >
         <ThemeProvider theme={theme}>
           <Container maxWidth={false} disableGutters className="w-full h-full">
             <Paper square className="w-full h-full">
